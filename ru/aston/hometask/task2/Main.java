@@ -4,9 +4,9 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
 
 public class Main {
-    private static final ReentrantLock lock = new ReentrantLock();
-    private static final Condition condition = lock.newCondition();
-    private static boolean isThread1Turn = true;
+    private static ReentrantLock lock = new ReentrantLock();
+    private static Condition condition = lock.newCondition();
+    private static volatile boolean isThread1Turn = true;
 
     public static void main(String[] args) {
         Thread thread1 = new Thread(() -> printNumber(1, true));
@@ -14,6 +14,13 @@ public class Main {
 
         thread1.start();
         thread2.start();
+
+        try {
+            thread1.join();
+            thread2.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void printNumber(int number, boolean isMyTurn) {
