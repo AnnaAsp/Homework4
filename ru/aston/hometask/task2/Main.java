@@ -6,7 +6,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Main {
     private static ReentrantLock lock = new ReentrantLock();
     private static Condition condition = lock.newCondition();
-    private static boolean isThread1Turn = true;
+    private static volatile boolean isThread1Turn = true;
 
     public static void main(String[] args) {
         Thread thread1 = new Thread(() -> printNumber(1, true));
